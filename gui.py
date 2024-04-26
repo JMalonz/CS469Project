@@ -50,15 +50,14 @@ def apply_HaldClut():
 
 def open_file_dialog():
     global file_path
-    
-    file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("Portable Network Graphics", "*.png"), ("JPEG", "*.jpg;*.jpeg"), ("All files", "*.*")])
+    file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if file_path:
         ttk.Label(mainframe, text = "Selected Image: " + ntpath.basename(file_path)).grid(column=3, row=2, sticky=W)
         
 
 def open_hald_dialog():
     global hald_file_path
-    hald_file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("Portable Network Graphics", "*.png"), ("JPEG", "*.jpg;*.jpeg"), ("All files", "*.*")])
+    hald_file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if hald_file_path:
         ttk.Label(mainframe, text = "Selected CLUT: " + ntpath.basename(hald_file_path)).grid(column=3, row=3, sticky=W)
         
