@@ -23,11 +23,8 @@ import numpy as np
 # In effect, we get the value of a pixel and map it to a color present in the CLUT which is represented by a 3D cube.
 # Once mapped, replace the original pixel color with the color from the CLUT.
 def apply_HaldClut():
-    try:
-        haldImg = Image.open(hald_file_path)
-        originalImg = Image.open(file_path)
-    except:
-        print("Please select both a HALD CLUT and an image before applying.")
+    if(not file_path or not hald_file_path):
+        ttk.Label(mainframe, text = "Please select a HALD CLUT and image file before pressing apply.").grid(column=1, row=3, sticky=W)
         return np.zeros(1)
     clut_width, clut_height = haldImg.size
     clut_size = int(round(math.pow(clut_width, 1/3)))
