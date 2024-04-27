@@ -19,31 +19,39 @@ import numpy as np
 #imgTest = Image.open("Test Pictures/iPhone6sPlus_SingleFace.JPG")
 #haldTest = Image.open("CLUTs/HaldCLUT/Color/Lomography/Lomography X-Pro Slide 200.png")
 
-# apply_clut will take a HALDclut file and an image file as arguments.
+# apply_HaldClut will use the globally accessible file_path and hald_file_path.
+# Previously, it would take a 
 # In effect, we get the value of a pixel and map it to a color present in the CLUT which is represented by a 3D cube.
 # Once mapped, replace the original pixel color with the color from the CLUT.
 def apply_HaldClut():
     if(not file_path or not hald_file_path):
         ttk.Label(mainframe, text = "Please select a HALD CLUT and image file before pressing apply.").grid(column=1, row=3, sticky=W)
-        return np.zeros(1)
-    clut_width, clut_height = haldImg.size
-    clut_size = int(round(math.pow(clut_width, 1/3)))
-    scalar = (clut_size * clut_size - 1) / 255
-    originalImg = np.asarray(originalImg)
-    haldImg = np.asarray(haldImg).reshape(clut_size ** 6, 3)
+        return -1
+    else:
+        # Open Images
+        haldImg = Image.open(hald_file_path)
+        originalImg = Image.open(file_path)
+        
+        clut_width, clut_height = haldImg.size
+        clut_size = int(round(math.pow(clut_width, 1/3)))
+        scalar = (clut_size * clut_size - 1) / 255
+        originalImg = np.asarray(originalImg)
+        haldImg = np.asarray(haldImg).reshape(clut_size ** 6, 3)
 
-    # Correspond 3D CLUT indices to corresponding pixels in the image
-    # clut_red, clut_green, and clut_blue all together represent 1 cell in the 3D clut.
-    clut_red = np.rint(originalImg[:, :, 0] * scalar).astype(int)
-    clut_green = np.rint(originalImg[:, :, 1] * scalar).astype(int)
-    clut_blue = np.rint(originalImg[:, :, 2] * scalar).astype(int)
+        # Correspond 3D CLUT indices to corresponding pixels in the image
+        # clut_red, clut_green, and clut_blue all together represent 1 cell in the 3D clut.
+        # use rint here instead of round because we need integers, not decimals.
+        # 
+        clut_red = np.rint(originalImg[:, :, 0] * scalar).astype(int)
+        clut_green = np.rint(originalImg[:, :, 1] * scalar).astype(int)
+        clut_blue = np.rint(originalImg[:, :, 2] * scalar).astype(int)
 
-    # Initialize a zeroed out array in the same resolution as the original image
-    modified_img = np.zeros((originalImg.shape))
-    # 
-    modified_img[:, :] = haldImg[clut_red + clut_size ** 2 * clut_green + clut_size ** 4 * clut_blue]
-    modified_img = Image.fromarray(modified_img.astype('uint8'), 'RGB')
-    modified_img.show()
+        # Initialize a zeroed out array in the same resolution as the original image
+        modified_img = np.zeros((originalImg.shape))
+        # 
+        modified_img[:, :] = haldImg[clut_red + clut_size ** 2 * clut_green + clut_size ** 4 * clut_blue]
+        modified_img = Image.fromarray(modified_img.astype('uint8'), 'RGB')
+        modified_img.show()
 
 def open_file_dialog():
     global file_path
@@ -60,7 +68,7 @@ def open_hald_dialog():
         
 
 root = Tk()
-root.geometry("450x250")
+root.geometry("600x250")
 root.title("Film Simulation Program")
 
 mainframe = ttk.Frame(root, padding="1 1 1 1")
