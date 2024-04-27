@@ -15,6 +15,7 @@ from PIL import Image
 import ntpath
 import math
 import numpy as np
+import cv2
 
 #imgTest = Image.open("Test Pictures/iPhone6sPlus_SingleFace.JPG")
 #haldTest = Image.open("CLUTs/HaldCLUT/Color/Lomography/Lomography X-Pro Slide 200.png")
@@ -48,10 +49,20 @@ def apply_HaldClut():
 
         # Initialize a zeroed out array in the same resolution as the original image
         modified_img = np.zeros((originalImg.shape))
-        # 
-        modified_img[:, :] = haldImg[clut_red + clut_size ** 2 * clut_green + clut_size ** 4 * clut_blue]
+
+        # For grain/noise generation, create an empty array the same size as the original image
+        noise = np.zeros((originalImg.shape), dtype = np.uint8)
+        cv2.randn(noise, 400, 50)
+        noise = (noise * 0.5).astype(np.uint8)
+        
+        # Add noise to image
+        
+        # Apply coloring mapping
+        modified_img[:, :] = haldImg[clut_red + clut_size ** 2 * clut_green + clut_size ** 4 * clut_blue] 
         modified_img = Image.fromarray(modified_img.astype('uint8'), 'RGB')
         modified_img.show()
+        noise = Image.fromarray(noise.astype('uint8'), 'RGB')
+        noise.show()
 
 def open_file_dialog():
     global file_path
