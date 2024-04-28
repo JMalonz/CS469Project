@@ -76,64 +76,71 @@ def visualize(
 
   return annotated_image
 
-# Create face detection instance
-base_options = python.BaseOptions(model_asset_path = 'blaze_face_short_range.tflite')
-options = vision.FaceDetectorOptions(base_options = base_options)
-detector = vision.FaceDetector.create_from_options(options)
+def face_detection_filtering(
+    file_path
+) -> Image:
+  # Create face detection instance
+  base_options = python.BaseOptions(model_asset_path = 'blaze_face_short_range.tflite')
+  options = vision.FaceDetectorOptions(
+      base_options = base_options,
+      min_detection_confidence = 0.5,
+      min_suppression_threshold = 0.3
+  )
+  detector = vision.FaceDetector.create_from_options(options)
 
-# Load image
-img_file_path = 'Test Pictures/FujifilmXT4_SingleFace_BlurredForeground.JPG'
-img = mp.Image.create_from_file(img_file_path)
+  # Load image
+  img = mp.Image.create_from_file(file_path)
 
-# Detect faces
-detection_result = detector.detect(img)
+  # Detect faces
+  detection_result = detector.detect(img)
+  print("Number of faces detected: ", len(detection_result.detections))
 
-# Visualize faces detected (if any)
-# img_copy = np.copy(img.numpy_view())
-# annotated_img = visualize(img_copy, detection_result)
-# rbg_annotated_img = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
-# resized_img = cv2.resize(rbg_annotated_img, (1920, 1080))
-# cv2.imshow("test", resized_img)
-# cv2.waitKey(0)
+  # # Visualize faces detected (if any)
+  # img_copy = np.copy(img.numpy_view())
+  # annotated_img = visualize(img_copy, detection_result)
+  # rbg_annotated_img = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
+  # resized_img = cv2.resize(rbg_annotated_img, (1920, 1080))
+  # cv2.imshow("test", resized_img)
+  # cv2.waitKey(0)
 
-# Open image using PIL to use image processing
-img = Image.open(img_file_path)
+  # Open image using PIL to use image processing
+  img = Image.open(file_path)
 
-# Apply filter to faces detected
-for d in detection_result.detections:
-    # Get coordinates of bounding box for current face
-    bbox = d.bounding_box
-    x = bbox.origin_x
-    y = bbox.origin_y
-    width = bbox.width
-    height = bbox.height
-    box = (x, y, x + width, y + height)
+  # Apply filter to faces detected
+  for d in detection_result.detections:
+      # Get coordinates of bounding box for current face
+      bbox = d.bounding_box
+      x = bbox.origin_x
+      y = bbox.origin_y
+      width = bbox.width
+      height = bbox.height
+      box = (x, y, x + width, y + height)
 
-    # Crop
-    cropped = img.crop(box)
-    # cropped.show("test")
+      # Crop
+      cropped = img.crop(box)
+      # cropped.show("test")
 
-    # Apply a filter to the cropped face
-    # options include:
-    # SMOOTH
-    # SMOOTH_MORE
-    # SHARPEN
-    # UNSHARP MASK
-    # MEDIAN BLUR
-    # GAUSSIAN BLUR
-    filtered_img = cropped.filter(ImageFilter.UnsharpMask)
-    # apply a filter multiple times
-    # for i in range(3):
-    #     filtered_img = filtered_img.filter(ImageFilter.SHARPEN)
+      # Apply a filter to the cropped face
+      # options include:
+      # SMOOTH
+      # SMOOTH_MORE
+      # SHARPEN
+      # UNSHARP MASK
+      # MEDIAN BLUR
+      # GAUSSIAN BLUR
+      filtered_img = cropped.filter(ImageFilter.UnsharpMask)
+      # apply a filter multiple times
+      # for i in range(3):
+      #     filtered_img = filtered_img.filter(ImageFilter.SHARPEN)
 
-    # Compare
-    # res = Image.new('RGB', (width * 2, height))
-    # res.paste(cropped, (0,0))
-    # res.paste(filtered_img, (width, 0))
-    # res.show("test")
+      # Compare
+      # res = Image.new('RGB', (width * 2, height))
+      # res.paste(cropped, (0,0))
+      # res.paste(filtered_img, (width, 0))
+      # res.show("test")
 
-    # Place back into original
-    img.paste(filtered_img, box)
+      # Place back into original
+      img.paste(filtered_img, box)
 
-# Results
-img.show()
+  # Results
+  return img
