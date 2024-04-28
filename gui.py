@@ -81,7 +81,7 @@ def apply_HaldClut():
 
 def open_file_dialog():
     global file_path
-    file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
+    file_path = filedialog.askopenfilename(title="Select animage file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if file_path:
         ttk.Label(mainframe, text = "Selected Image: " + ntpath.basename(file_path)).grid(column=1, row=2, sticky=W)
         
@@ -107,8 +107,8 @@ root.rowconfigure(0, weight=1)
 
 ttk.Label(mainframe, text="Please select the image you wish to apply the filter to.\nThen select the clut/filter you wish to apply.").grid(column=1, row=1, sticky=NW)
 
-openImageButton = ttk.Button(mainframe, text="Open Image", command = open_file_dialog)
-openHaldButton = ttk.Button(mainframe, text="Open HaldCLUT", command = open_hald_dialog)
+openImageButton = ttk.Button(mainframe, text="Open Color Image", command = open_file_dialog)
+openHaldButton = ttk.Button(mainframe, text="Open Color HaldCLUT", command = open_hald_dialog)
 #saveDirButton = ttk.Button(mainframe, text="Choose Save Folder", command = chooseSaveDir)
 applyButton = ttk.Button(mainframe, text="Apply", command=apply_HaldClut)
 
