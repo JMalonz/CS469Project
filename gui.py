@@ -11,6 +11,7 @@
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from PIL import Image, ImageFilter
 import ntpath
@@ -76,6 +77,7 @@ def apply_HaldClut():
         if file:
             save_path = ntpath.abspath(file.name)
             modified_img.save(save_path)
+            messagebox.showinfo("Success!", message="Image has been saved!")
         #modified_img.show()
         #noise.show()
 
