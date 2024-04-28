@@ -95,13 +95,14 @@ def face_detection_filtering(
   detection_result = detector.detect(img)
   print("Number of faces detected: ", len(detection_result.detections))
 
-  # # Visualize faces detected (if any)
-  # img_copy = np.copy(img.numpy_view())
-  # annotated_img = visualize(img_copy, detection_result)
-  # rbg_annotated_img = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
-  # resized_img = cv2.resize(rbg_annotated_img, (1920, 1080))
-  # cv2.imshow("test", resized_img)
-  # cv2.waitKey(0)
+  # Visualize faces detected (if any)
+  img_copy = np.copy(img.numpy_view())
+  annotated_img = visualize(img_copy, detection_result)
+  rbg_annotated_img = cv2.cvtColor(annotated_img, cv2.COLOR_BGR2RGB)
+  resized_img = cv2.resize(rbg_annotated_img, (1920, 1080))
+  cv2.imshow("test", resized_img)
+  cv2.waitKey(0)
+  cv2.destroyAllWindows()
 
   # Open image using PIL to use image processing
   img = Image.open(file_path)

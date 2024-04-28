@@ -14,10 +14,10 @@ from tkinter import filedialog
 from tkinter import messagebox
 from tkinter.filedialog import askdirectory
 from PIL import Image, ImageFilter
+from faceDetect import face_detection_filtering
 import ntpath
 import math
 import numpy as np
-import cv2
 
 #imgTest = Image.open("Test Pictures/iPhone6sPlus_SingleFace.JPG")
 #haldTest = Image.open("CLUTs/HaldCLUT/Color/Lomography/Lomography X-Pro Slide 200.png")
@@ -34,6 +34,10 @@ def apply_HaldClut():
         # Open Images
         haldImg = Image.open(hald_file_path)
         originalImg = Image.open(file_path)
+
+        # Apply face detection (optional)
+        if applyFaceDetection.get():
+            originalImg = face_detection_filtering(file_path)
         
         clut_width, clut_height = haldImg.size
         clut_size = int(round(math.pow(clut_width, 1/3)))
@@ -113,6 +117,9 @@ openImageButton = ttk.Button(mainframe, text="Open Color Image", command = open_
 openHaldButton = ttk.Button(mainframe, text="Open Color HaldCLUT", command = open_hald_dialog)
 #saveDirButton = ttk.Button(mainframe, text="Choose Save Folder", command = chooseSaveDir)
 applyButton = ttk.Button(mainframe, text="Apply", command=apply_HaldClut)
+global applyFaceDetection
+applyFaceDetection = IntVar(root)
+faceDetectCheckbox = ttk.Checkbutton(mainframe, text="Apply face detection and filtering", variable = applyFaceDetection)
 
 for child in mainframe.winfo_children(): 
     child.grid_configure(padx=5, pady=5)
