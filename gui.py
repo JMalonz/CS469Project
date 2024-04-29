@@ -87,7 +87,7 @@ def apply_HaldClut():
 
 def open_file_dialog():
     global file_path
-    file_path = filedialog.askopenfilename(title="Select animage file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
+    file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if file_path:
         ttk.Label(mainframe, text = "Selected Image: " + ntpath.basename(file_path)).grid(column=1, row=2, sticky=W)
         
