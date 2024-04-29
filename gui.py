@@ -89,14 +89,14 @@ def open_file_dialog():
     global file_path
     file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if file_path:
-        ttk.Label(mainframe, text = "Selected Image: " + ntpath.basename(file_path)).grid(column=1, row=2, sticky=W)
+        name_of_file.set("Selected Image: " + ntpath.basename(file_path))
         
 
-def open_hald_dialog():
+def open_hald_dialog():   
     global hald_file_path
     hald_file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
     if hald_file_path:
-        ttk.Label(mainframe, text = "Selected CLUT: " + ntpath.basename(hald_file_path)).grid(column=1, row=3, sticky=W)
+        name_of_hald.set("Selected CLUT: " + ntpath.basename(hald_file_path))
         
 #def chooseSaveDir():
 #    global save_path
@@ -123,5 +123,11 @@ faceDetectCheckbox = ttk.Checkbutton(mainframe, text="Apply face detection and f
 
 for child in mainframe.winfo_children(): 
     child.grid_configure(padx=5, pady=5)
+
+global name_of_file, name_of_hald
+name_of_file = StringVar()
+name_of_hald = StringVar()
+ttk.Label(mainframe, textvariable = name_of_file).grid(column=1, row=2, sticky=W)
+ttk.Label(mainframe, textvariable = name_of_hald).grid(column=1, row=3, sticky=W)
 
 root.mainloop()
