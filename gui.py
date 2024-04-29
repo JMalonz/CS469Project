@@ -34,7 +34,6 @@ def apply_HaldClut():
         # Open Images
         haldImg = Image.open(hald_file_path)
         originalImg = Image.open(file_path)
-
         # Apply face detection (optional)
         if applyFaceDetection.get():
             originalImg = face_detection_filtering(file_path)
@@ -77,6 +76,8 @@ def apply_HaldClut():
         modified_img = Image.blend(modified_img, noise, 0.15)
         # Median Filter to make noise look more believeable as film
         modified_img = modified_img.filter(ImageFilter.MedianFilter(size = 3))
+        
+        #Ask where to save file
         file = filedialog.asksaveasfile(mode = 'w', defaultextension = ".png", filetypes=[("PNG", "*.png;*.PNG"), ("JPEG", "*.jpg;*.jpeg;*.JPG;*.JPEG"), ("All Files", "*.*")])
         if file:
             save_path = ntpath.abspath(file.name)
@@ -87,8 +88,8 @@ def apply_HaldClut():
 
 def open_file_dialog():
     global file_path
-    file_path = filedialog.askopenfilename(title="Select animage file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
-    if file_path:
+    file_path = filedialog.askopenfilename(title="Select an image file", filetypes=[("PNG or JPEG", "*.png;*.jpg;*.jpeg")])
+    if file_path:  
         ttk.Label(mainframe, text = "Selected Image: " + ntpath.basename(file_path)).grid(column=1, row=2, sticky=W)
         
 
